@@ -12,6 +12,7 @@ Simply run "main.html" in a canvas element supporting browser to get a working m
 
 If you want to change between level 1 or 2, type into your browser's console:
 - LEVEL=1;reset_levels();draw_level();
+- LEVEL=2;reset_levels();draw_level();
 
 ----
 IMPLEMENTED:
