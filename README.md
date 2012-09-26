@@ -25,3 +25,6 @@ IN PROGRRESS:
   This should greatly reduce the amount of code and calculations.
 - Level Win recognition.
 - Switch level after win (tbd after level win recognition).
+
+FUTURE PLANS:
+- Make a 3D first/third person version of the game.
