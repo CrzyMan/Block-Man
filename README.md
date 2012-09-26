@@ -11,6 +11,10 @@ TO PREVIEW
 Simply run "main.html" in a canvas element supporting browser to get a working model of the final level of "Block Dude."
 
 ----
+IMPLEMENTED:
+- Accurate to original game movement and physics
+- Actual Levels (first and last)
+- Different Colors for different kinds of blocks (brick, movable, player, door... and technically air)
 
 IN PROGRRESS:
 - Request based movement (a.k.a. occupation intents). <br>
