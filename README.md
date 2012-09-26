@@ -8,7 +8,10 @@ using HTML5, Javascript
 ----
 TO PREVIEW
 
-Simply run "main.html" in a canvas element supporting browser to get a working model of the final level of "Block Dude."
+Simply run "main.html" in a canvas element supporting browser to get a working model of the final level of "Block Dude." (currently the last level of Block Dude, but level two of Block Man)
+
+If you want to change between level 1 or 2, type into your browser's console:
+- LEVEL=1;reset_levels();draw_level();
 
 ----
 IMPLEMENTED:

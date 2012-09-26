@@ -180,6 +180,7 @@ function find_start_pos(l){
 
 draw_level(2);
 function draw_level(l){
+	if (l==undefined)l=LEVEL;
 	ctx.clearRect(0,0,canvas.width, canvas.height);
 	l--;
 	curr_lev = levels[l];
