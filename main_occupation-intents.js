@@ -11,47 +11,50 @@ canvas.height = 440;
 canvas.width = 600;
 
 var player = {
-	pos: {
-		x: 0,
-		y: 0
-	},
+	pos: new Vector2d(),
 	carrying: false,
 	direction: 1,
-	right: function(d){
-		console.log(d);
+	lateral: function(d){
 		player.direction=d
 		curr_lev[player.pos.y][player.pos.x] = 0;
-		player.pos = request_position(player.pos, {x:  player.pos.x+d, y: player.pos.y});
+		//player.pos = request_position(player.pos, {x: player.pos.x+player.direction, y: player.pos.y});
+		var to_oc = player.pos.add(player.direction,0);
+		player.pos = request_position(player.pos, to_oc);
 		curr_lev[player.pos.y][player.pos.x] = 2;
 		draw_level();
 	},
-	left: function(){
-	
-	},
 	up: function(){
-	
+		curr_lev[player.pos.y][player.pos.x] = 0;
+		var to_oc = player.pos.add(player.direction,-1);
+
+		// add carrying clause
+		if (curr_lev[player.pos.y][player.pos.x+player.direction]!=0)
+			player.pos = request_position(player.pos, to_oc);
+
+		curr_lev[player.pos.y][player.pos.x] = 2;
+		draw_level();
 	},
 	down: function(){
-	
-	},
-	
-	confirm_request: function(){
-		// for checking if it is goal
+		if (player.carrying){
+			curr_lev[player.pos.y-1][player.pos.x]=0;
+			var new_block_pos = request_position({})
+		}
 	}
 };
 
 function request_position(current, requested){
-		// determine if position is currently occupyable
-		if (curr_lev[requested.y][requested.x]==0 || curr_lev[requested.y][requested.x]==4){
-			//check if need to drop down
-			if (!curr_lev[requested.y+1][requested.x]){
-				while (!curr_lev[requested.y+1][requested.x]) {requested.y++;}
-			}
-			return requested;
+	console.log(requested.x + ", " + requested.y);
+	// determine if position is currently occupyable
+	if (curr_lev[requested.y][requested.x]==0 || curr_lev[requested.y][requested.x]==4){
+		//check if need to drop down
+		if (!curr_lev[requested.y+1][requested.x]){
+			while (!curr_lev[requested.y+1][requested.x]) {requested.y++;}
 		}
-		
-		// if not, return substitute position
-		return current;
+		return requested;
+	}
+	
+	// if not, return substitute position
+	return current;
 };
 
 var levels;
@@ -90,10 +93,10 @@ function find_start_pos(l){
 	l--;
 	for (var r = 0; r < levels[l].length; r++){
 		for (var c = 0; c < levels[l][r].length; c++){
-			if (levels[l][r][c]==2) return {x: c, y: r};
+			if (levels[l][r][c]==2) return new Vector2d(c,r);
 		}
 	}
-	return {x: 0, y:0};
+	return new Vector2d();
 }
 
 draw_level(2);
@@ -156,7 +159,14 @@ function draw_level(l){
 
 // Key Binding Functions //
 var binded_keys = {};
-function bind(code, func, args){
+// bind( code, func, *args)
+function bind(){
+	code = arguments[0];
+	func = arguments[1];
+	args = [];
+	for (var i = 2; i<arguments.length; i++){
+		args.push(arguments[i]);
+	}
 	binded_keys[code] = [func,args];
 }
 
@@ -166,16 +176,17 @@ function check_bindings(e){
 	if (window.event) keycode = window.event.keyCode;
 	else if (e) keycode = e.which;
 	
-	console.log(binded_keys[keycode][1]);
-	if (binded_keys[keycode]) binded_keys[keycode][0].apply(this, binded_keys[keycode][1]);
+	try {
+		binded_keys[keycode][0].apply(this, binded_keys[keycode][1]);
+	} catch (e){}
 }
 //**//
 
 //left arrow
-bind(37, player.right, -1);
+bind(37, player.lateral, -1);
 //up arrow
 bind(38, player.up);
 //right arrow
-bind(39, player.right, 1);
+bind(39, player.lateral, 1);
 //down arrow
 bind(40, player.down);
