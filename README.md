@@ -19,13 +19,13 @@ IMPLEMENTED:
 - Accurate to original game movement and physics
 - Actual Levels (first and last)
 - Different Colors for different kinds of blocks (brick, movable, player, door... and technically air)
+- Incorporation of Vector objects.
 
 IN PROGRRESS:
 - Request based movement (a.k.a. occupation intents). <br>
-  This should greatly reduce the amount of code and calculations.
+  This reduce superfluous code.
 - Level Win recognition.
 - Switch level after win (tbd after level win recognition).
-- Incorporation of Vector objects.
 
 FUTURE PLANS:
 - Make a 3D first/third person version of the game.
