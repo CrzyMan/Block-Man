@@ -22,10 +22,10 @@ IMPLEMENTED:
 - Incorporation of Vector objects.
 
 IN PROGRRESS:
-- Request based movement (a.k.a. occupation intents). <br>
-  This reduce superfluous code.
+- Request based movement (a.k.a. occupation intents) to reduce superfluous code.
 - Level Win recognition.
 - Switch level after win (tbd after level win recognition).
+- Space saving level storage.
 
 FUTURE PLANS:
 - Make a 3D first/third person version of the game.
