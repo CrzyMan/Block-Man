@@ -16,35 +16,112 @@ var player = {
 	direction: 1,
 	lateral: function(d){
 		player.direction=d
+		
+		// reset player and block, if carrying
 		curr_lev[player.pos.y][player.pos.x] = 0;
-		//player.pos = request_position(player.pos, {x: player.pos.x+player.direction, y: player.pos.y});
-		var to_oc = player.pos.add(player.direction,0);
-		player.pos = request_position(player.pos, to_oc);
-		curr_lev[player.pos.y][player.pos.x] = 2;
+		if (player.carrying)
+			curr_lev[player.pos.y-1][player.pos.x] = 0
+
+		// new player pos (npp) to requested position (rp) and store last position
+		var lp = player.pos;
+		var rp = player.pos.add(player.direction,0);
+		var npp = request_position(player.pos, rp);
+
+		//check if win
+		if (curr_lev[npp.y][npp.x]==4){
+			// YOU WIN
+			curr_lev[player.pos.y][player.pos.x] = 0;
+			player.pos = npp;
+			draw_level();
+			alert("YOU WIN!");
+
+			LEVEL =  1 + LEVEL%levels.length;
+			reset_levels();
+			draw_level();
+
+			return;
+		}
+
+		curr_lev[npp.y][npp.x] = 2;
+
+
+		// carrying clause
+		if (player.carrying){
+			// request new position where it would be if moved to the side
+			// will drop if the player goes down, or will stay then dropped if can't move to the side
+			// request position above new player position at level the block used to be at
+			var nbp = request_position(lp.add(0,-1), new Vector2d(npp.x,lp.y-1))
+			curr_lev[nbp.y][nbp.x] = 3;
+		}
+
+		// update player
+		player.pos = npp;
+		
 		draw_level();
 	},
 	up: function(){
-		curr_lev[player.pos.y][player.pos.x] = 0;
-		var to_oc = player.pos.add(player.direction,-1);
+		
+		var rp = player.pos.add(player.direction,-1);
 
-		// add carrying clause
-		if (curr_lev[player.pos.y][player.pos.x+player.direction]!=0)
-			player.pos = request_position(player.pos, to_oc);
+		// can move up, carrying restriction and handling updates
+		if (curr_lev[player.pos.y][player.pos.x+player.direction]!=0 && curr_lev[player.pos.y-1][player.pos.x]!=1 &&
+			!(curr_lev[player.pos.y-2][player.pos.x+player.direction] && player.carrying)){
 
-		curr_lev[player.pos.y][player.pos.x] = 2;
+			if (player.carrying)
+				curr_lev[player.pos.y-1][player.pos.x] = 0;
+
+			curr_lev[player.pos.y][player.pos.x] = 0;
+
+			player.pos = request_position(player.pos, rp);
+			if (player.carrying){
+				curr_lev[player.pos.y-1][player.pos.x] = 3;
+			}
+
+			// check if win
+			if (curr_lev[player.pos.y][player.pos.x]==4){
+				// YOU WIN
+				draw_level();
+				alert("YOU WIN!");
+
+				LEVEL = 1 + LEVEL%levels.length;
+				reset_levels();
+				draw_level();
+
+			return;
+		}
+
+
+			curr_lev[player.pos.y][player.pos.x] = 2;
+			
+		}
 		draw_level();
+
 	},
 	down: function(){
 		if (player.carrying){
-			curr_lev[player.pos.y-1][player.pos.x]=0;
-			var new_block_pos = request_position({})
+			//place the block
+			curr_lev[player.pos.y-1][player.pos.x] = 0;
+			var nbp = request_position(player.pos.add(player.direction,-1), player.pos.add(player.direction,-1));
+			curr_lev[nbp.y][nbp.x] = 3;
+			player.carrying = false;
+
+		} else {
+			// not carrying
+			// if a block to pick up 
+			if (curr_lev[player.pos.y][player.pos.x+player.direction]==3 &&
+			    !curr_lev[player.pos.y-1][player.pos.x+player.direction] &&
+			    !curr_lev[player.pos.y-1][player.pos.x]){
+				curr_lev[player.pos.y][player.pos.x+player.direction] = 0;
+				curr_lev[player.pos.y-1][player.pos.x] = 3;
+				player.carrying = true;
+			}
 		}
+		draw_level();
 	}
 };
 
 function request_position(current, requested){
-	console.log(requested.x + ", " + requested.y);
-	// determine if position is currently occupyable
+	// determine if requested position is currently occupyable
 	if (curr_lev[requested.y][requested.x]==0 || curr_lev[requested.y][requested.x]==4){
 		//check if need to drop down
 		if (!curr_lev[requested.y+1][requested.x]){
@@ -74,14 +151,15 @@ function reset_levels(){
 		 [1,0,0,0,0,0,3,1,3,3,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],
 		 [1,3,0,0,0,1,1,1,0,3,1,1,0,0,0,0,0,3,0,0,1,1,0,0,4,0,1,0,1],
 		 [1,3,3,0,0,0,0,1,1,1,0,0,0,2,0,0,3,0,0,0,0,0,0,0,1,0,1,0,1],
-		 [1,1,1,0,0,3,3,1,0,0,0,0,0,1,0,3,0,0,0,0,0,0,0,0,0,0,1,0,1],
-		 [1,0,0,0,1,1,1,1,0,0,0,0,0,0,1,0,0,1,1,1,0,0,0,1,1,1,0,0,1],
+		 [1,1,1,0,0,3,3,1,0,0,0,0,0,1,0,3,0,0,0,0,0,0,0,3,0,0,1,0,1],
+		 [1,0,0,0,1,1,1,1,0,0,0,0,0,0,1,0,0,1,1,1,3,3,3,1,1,1,0,0,1],
 		 [1,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,3,0,1],
 		 [1,3,3,0,0,0,0,0,0,0,1,1,1,0,1,0,1,3,0,0,0,0,1,0,0,1,1,1,1],
 		 [1,1,1,1,0,3,0,0,0,1,1,1,0,0,1,0,1,1,3,0,0,1,0,3,0,1,0,0,1],
 		 [1,0,0,0,0,0,0,0,0,0,0,0,3,0,1,1,1,0,0,3,1,0,0,0,1,0,0,0,1],
 		 [1,0,0,0,3,0,0,0,0,0,3,3,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1],
-		 [1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1]]
+		 [1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],
+		 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
 	];
 
 	player.pos = find_start_pos();
