@@ -4,7 +4,7 @@
 var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 
-var LEVEL = 2;
+var LEVEL = 1;
 var curr_lev;
 
 canvas.height = 440;
@@ -134,23 +134,92 @@ function request_position(current, requested){
 	return current;
 };
 
-var levels;
+function compress_level(l){
+	var key = ['a','b','p','m','g'];
+	var ina = 0, last = 1, str = "";
+	for (var row in l){
+		for (var col=0; col<l[row].length; col++){
+			if (l[row][col] == last){
+				ina++;
+			} else {
+				if (ina >1) str+= ina;
+				str+=key[last];
+				last = l[row][col], ina = 1;
+			}
+			if (col == l[row].length-1){
+				if (ina >1) str+= ina;
+				str+=key[last];
+			}
+		}
+		last = 1, ina = 0, str+=":";
+	}
+	str = str.slice(0,str.length-1);
+	return str;
+}
+
+function decompress_level(l){
+	var key = {'b': 1, 'm': 3, 'a': 0, 'p': 2, 'g': 4};
+	var myLevel = [];
+	var post_levels = l.toString().split(':');
+	for(var r in post_levels){
+		var myar = [];
+		var mystr = post_levels[r];
+		while (mystr.search(/[a-z]/)!=-1){
+			var s = mystr.search(/[a-z]/)+1;
+			myar.push(mystr.slice(0,s));
+			mystr = mystr.slice(s);
+		}
+		post_levels[r] = myar;
+	}
+
+	
+	for (var row=0; row<post_levels.length; row++){
+		myLevel.push([])
+		for (var col=0; col<post_levels[row].length; col++){
+
+			var str = post_levels[row][col];
+			var len = str.length;
+			var bl = key[str[len - 1]];
+			var num = parseInt(str.slice(0,len -1)) || 1;
+
+			for (var i = 0; i < num; i++){
+				myLevel[row].push(bl);
+			}
+		}
+	}
+	return myLevel;
+}
+
+var levels = [];
+var levels_comp;
 reset_levels();
 function reset_levels(){
+	
+	levels_comp = [
+		// b = 1 brick, m = 1 movable, a = 1 air, p = 1 layer, g = 1 goal, 20b = 20 bricks etc.
+		/* level 1 */
+		["20b:b18ab:b18ab:b3ab8ab5ab:bg2ab4abamabamp2ab:20b"],
+
+		/* level 2 */
+		["29b:b2ab3ab20ab:b5amb2m12a5bab:bm3a3bam2b5am2a2b2agabab:b2m4a3b3ap2am7ababab:3b2a2mb5abam7am2abab:b3a4b6ab2a3b3m3b2ab:bm12abab6ab2amab:b2m7a3bababm4ab2a4b:4bam3a3b2aba2bm2abamab2ab:b11ama3b2amb3ab3ab:b3am5a2mab3a4b7ab:b4a9b8a5bab:29b"]
+		/* */
+	];
+
 	levels = [
-		//level one
+		/* level one *
 		[[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		 [1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
 		 [1,4,0,0,1,0,0,0,0,1,0,3,0,1,0,3,2,0,0,1],
 		 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],
+		/* */
 
-		//level two
+		/* level two *
 		[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 		 [1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		 [1,0,0,0,0,0,3,1,3,3,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],
 		 [1,3,0,0,0,1,1,1,0,3,1,1,0,0,0,0,0,3,0,0,1,1,0,0,4,0,1,0,1],
-		 [1,3,3,0,0,0,0,1,1,1,0,0,0,2,0,0,3,0,0,0,0,0,0,0,1,0,1,0,1],
+		 [1,3,3,0,0,0,3,1,1,1,0,0,0,2,0,0,3,0,0,0,0,0,0,0,1,0,1,0,1],
 		 [1,1,1,0,0,3,3,1,0,0,0,0,0,1,0,3,0,0,0,0,0,0,0,3,0,0,1,0,1],
 		 [1,0,0,0,1,1,1,1,0,0,0,0,0,0,1,0,0,1,1,1,3,3,3,1,1,1,0,0,1],
 		 [1,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,3,0,1],
@@ -160,7 +229,16 @@ function reset_levels(){
 		 [1,0,0,0,3,0,0,0,0,0,3,3,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1],
 		 [1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],
 		 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
+		/* */
 	];
+	
+
+	for (var lev=0; lev<levels_comp.length; lev++){
+
+		levels.push(decompress_level(levels_comp[lev]));
+	}
+
+	
 
 	player.pos = find_start_pos();
 
@@ -177,7 +255,7 @@ function find_start_pos(l){
 	return new Vector2d();
 }
 
-draw_level(2);
+draw_level();
 function draw_level(l){
 	if (l==undefined) l=LEVEL;
 

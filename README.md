@@ -18,11 +18,13 @@ IMPLEMENTED:
 - Incorporation of Vector objects.
 - Request based movement (a.k.a. occupation intents) to reduce superfluous code.
 - Level Win recognition.
-- Switch level after win (tbd after level win recognition).
+- Switch level after win.
+- Space saving level compression/decompression.
 
 IN PROGRRESS:
 
-- Space saving level storage.
+- More levels.
+- Explore map without moving the player (shift+arrow)
 
 FUTURE PLANS:
 
