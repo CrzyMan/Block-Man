@@ -198,10 +198,14 @@ function reset_levels(){
 	levels_comp = [
 		// b = 1 brick, m = 1 movable, a = 1 air, p = 1 layer, g = 1 goal, 20b = 20 bricks etc.
 		/* level 1 */
-		["20b:b18ab:b18ab:b3ab8ab5ab:bg2ab4abamabamp2ab:20b"],
+		"20b:b18ab:b18ab:b3ab8ab5ab:bg2ab4abamabamp2ab:20b",
 
 		/* level 2 */
-		["29b:b2ab3ab20ab:b5amb2m12a5bab:bm3a3bam2b5am2a2b2agabab:b2m4a3b3ap2am7ababab:3b2a2mb5abam7am2abab:b3a4b6ab2a3b3m3b2ab:bm12abab6ab2amab:b2m7a3bababm4ab2a4b:4bam3a3b2aba2bm2abamab2ab:b11ama3b2amb3ab3ab:b3am5a2mab3a4b7ab:b4a9b8a5bab:29b"]
+		"29b:b2ab3ab20ab:b5amb2m12a5bab:bm3a3bam2b5am2a2b2agabab:b2m4a3b3ap2am7ababab:3b2a2mb5abam7am2abab:b3a4b6ab2a3b3m3b2ab:bm12abab6ab2amab:b2m7a3bababm4ab2a4b:4bam3a3b2aba2bm2abamab2ab:b11ama3b2amb3ab3ab:b3am5a2mab3a4b7ab:b4a9b8a5bab:29b",
+
+		/* level 3 */
+		"b10ab:b5a2b3ab:bp2am6ap:12b"
+
 		/* */
 	];
 
@@ -230,6 +234,13 @@ function reset_levels(){
 		 [1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],
 		 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
 		/* */
+
+		/* level 3 *
+		[[1,0,0,0,0,0,0,0,0,0,0,1],
+		 [1,0,0,0,0,0,1,1,0,0,0,1],
+		 [1,2,0,0,3,0,0,0,0,0,0,2],
+		 [1,1,1,1,1,1,1,1,1,1,1,1]]
+        /* */
 	];
 	
 
