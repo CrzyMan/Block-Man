@@ -25,6 +25,7 @@ IN PROGRRESS:
 
 - More levels.
 - Explore map without moving the player (shift+arrow)
+- Fix walk under brick while carrying block bug (not shown, but trust me, it's there).
 
 FUTURE PLANS:
 
