@@ -21,10 +21,13 @@ IMPLEMENTED:
 - Switch level after win.
 - Space saving level compression/decompression.
 
-IN PROGRRESS:
+TO BE DONE:
 
 - More levels.
 - Explore map without moving the player (shift+arrow).
+- Passwords.
+- Reset Level.
+- Main menu.
 
 FUTURE PLANS:
 
