@@ -20,14 +20,16 @@ IMPLEMENTED:
 - Level Win recognition.
 - Switch level after win.
 - Level data compression/decompression.
+- only 1 level decompressed at a time (save on memory).
+- All real Block Dude Levels
+- Can explore laterally
 
 TO BE DONE:
 
-- Fix no win if you fall on goal (upon level 3 win, type into console: LEVEL=4;reset_levels();draw_level(); )
-- More levels (working on it, had to fix a compression bug).
 - Explore map without moving the player (shift+arrow).
 - Passwords.
-- Reset Level.
+- Level menu.
+- Reset Level (r).
 - Main menu.
 
 FUTURE PLANS:
