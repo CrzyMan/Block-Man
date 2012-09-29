@@ -52,6 +52,11 @@ var player = {
 			// request position above new player position at level the block used to be at
 			var nbp = request_position(lp.add(0,-1), new Vector2d(npp.x,lp.y-1))
 			curr_lev[nbp.y][nbp.x] = 3;
+
+			// check if still carrying
+			if (nbp.x != npp.x && nbp.y!= npp.y-1){
+				player.carrying = false;
+			}
 		}
 
 		// update player
@@ -130,7 +135,10 @@ function request_position(current, requested){
 		return requested;
 	}
 	
-	// if not, return substitute position
+	// if not, return substitute position, drop if nothing beneath
+	if (!curr_lev[current.y+1][current.x]){
+		while (!curr_lev[current.y+1][current.x]) {current.y++;}
+	}
 	return current;
 };
 
@@ -204,7 +212,7 @@ function reset_levels(){
 		"29b:b2ab3ab20ab:b5amb2m12a5bab:bm3a3bam2b5am2a2b2agabab:b2m4a3b3ap2am7ababab:3b2a2mb5abam7am2abab:b3a4b6ab2a3b3m3b2ab:bm12abab6ab2amab:b2m7a3bababm4ab2a4b:4bam3a3b2aba2bm2abamab2ab:b11ama3b2amb3ab3ab:b3am5a2mab3a4b7ab:b4a9b8a5bab:29b",
 
 		/* level 3 */
-		"b10ab:b5a2b3ab:bp2am6ap:12b"
+		"b10ab:b5a2b3ab:bp2am6ag:12b"
 
 		/* */
 	];
