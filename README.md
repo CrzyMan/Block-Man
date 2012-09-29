@@ -19,11 +19,12 @@ IMPLEMENTED:
 - Request based movement (a.k.a. occupation intents) to reduce superfluous code.
 - Level Win recognition.
 - Switch level after win.
-- Space saving level compression/decompression.
+- Level data compression/decompression.
 
 TO BE DONE:
 
-- More levels.
+- Fix no win if you fall on goal (upon level 3 win, type into console: LEVEL=4;reset_levels();draw_level(); )
+- More levels (working on it, had to fix a compression bug).
 - Explore map without moving the player (shift+arrow).
 - Passwords.
 - Reset Level.

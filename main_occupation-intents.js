@@ -106,9 +106,12 @@ var player = {
 		if (player.carrying){
 			//place the block
 			curr_lev[player.pos.y-1][player.pos.x] = 0;
-			var nbp = request_position(player.pos.add(player.direction,-1), player.pos.add(player.direction,-1));
+			var nbp = request_position(player.pos.add(0,-1), player.pos.add(player.direction,-1));
 			curr_lev[nbp.y][nbp.x] = 3;
-			player.carrying = false;
+
+			// if not right above it anymore
+			if (nbp.x != player.pos.x)
+				player.carrying = false;
 
 		} else {
 			// not carrying
@@ -143,8 +146,8 @@ function request_position(current, requested){
 };
 
 function compress_level(l){
-	var key = ['a','b','p','m','g'];
-	var ina = 0, last = 1, str = "";
+	var key = ['a','b','p','m','g',''];
+	var ina = 0, last = 5, str = "";
 	for (var row in l){
 		for (var col=0; col<l[row].length; col++){
 			if (l[row][col] == last){
@@ -159,7 +162,7 @@ function compress_level(l){
 				str+=key[last];
 			}
 		}
-		last = 1, ina = 0, str+=":";
+		last = 5, ina = 0, str+=":";
 	}
 	str = str.slice(0,str.length-1);
 	return str;
@@ -208,48 +211,29 @@ function reset_levels(){
 		/* level 1 */
 		"20b:b18ab:b18ab:b3ab8ab5ab:bg2ab4abamabamp2ab:20b",
 
-		/* level 2 */
-		"29b:b2ab3ab20ab:b5amb2m12a5bab:bm3a3bam2b5am2a2b2agabab:b2m4a3b3ap2am7ababab:3b2a2mb5abam7am2abab:b3a4b6ab2a3b3m3b2ab:bm12abab6ab2amab:b2m7a3bababm4ab2a4b:4bam3a3b2aba2bm2abamab2ab:b11ama3b2amb3ab3ab:b3am5a2mab3a4b7ab:b4a9b8a5bab:29b",
+		/* Level 2 */
+		"ab4a2b9a2b4a:ab17ab:2b18ab:bg19ab:2b11ab3am4ab:ab11abama2mp2ab:a5b3a14b:5ab2amb:5a5b",
 
 		/* level 3 */
-		"b10ab:b5a2b3ab:bp2am6ag:12b"
+		"ab16a:ab3a13b:babab13ab:b2ab14ab:b16amb:b15a2mb:ba3b4ap3abma2b:babab4ab2a5b:babab2ma2b2ab:bgba6ba2b:3ba2b3a3b",
 
-		/* */
+		/* level 4 */
+		"18ab5a:17abab:7ab8ab3ab:6abab6ab5ab:3a3b3ab4ab7ab:2ab7ab2ab9ab:ab9a2b10ab:ab20amb:ab19a2mb:ab15ap3a3b:2b4ab10ab3ab:bg4abam8a5b:5babam3am2a3b:4ababamababmab:4aba10b:4a3b",
+
+		/* level 5 */
+		"5a3b4a9ba:a4b3a4b9ab:b20ab:b20ab:b20ab:b5ab14ab:b5ab14ab:b5ab4m10ab:bg3a7bp8ab:2ba3b5a2bab5amb:abab8aba2b3a2mb:abab8aba2b2a3mb:a3b8aba8b:12a3b",
+
+		/* level 6 */
+		"a3b13a4b:ab2a13b3ab:2b18ab:bg18ab:2b18ab:ab16a2mb:ab2m8ab2am2a3b:ab3m7abp3mab:ab4m6a5bab:a5b4a3b3a3b:5ab3amb:5a2ba3b:6a3b",
+
+		/* level 7 */
+		"2ab3a5b3a2b3a3b2a:ababab5abab2abab3ab:ab2a2b6a2b3a2b4ab:ab3ab7ab4ab4ab:ab20amb:ab20amb:2b19a2mb:bg3am15a3b:2b3abam5ab4a2bab:ab3abam4a2bamap4b:a2b2aba3m2a2ba3mb:2ab2a6ba7b:2a2bab4a3b:3a3b",
+
+		/* level 11 */
+		"29b:b2ab3ab20ab:b5amb2m12a5bab:bm3a3bam2b5am2a2b2agabab:b2m4a3b3ap2am7ababab:3b2a2mb5abam7am2abab:b3a4b6ab2a3b3m3b2ab:bm12abab6ab2amab:b2m7a3bababm4ab2a4b:4bam3a3b2aba2bm2abamab2ab:b11ama3b2amb3ab3ab:b3am5a2mab3a4b7ab:b4a9b8a5bab:29b"
 	];
 
-	levels = [
-		/* level one *
-		[[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-		 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-		 [1,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
-		 [1,4,0,0,1,0,0,0,0,1,0,3,0,1,0,3,2,0,0,1],
-		 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],
-		/* */
-
-		/* level two *
-		[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-		 [1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-		 [1,0,0,0,0,0,3,1,3,3,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],
-		 [1,3,0,0,0,1,1,1,0,3,1,1,0,0,0,0,0,3,0,0,1,1,0,0,4,0,1,0,1],
-		 [1,3,3,0,0,0,3,1,1,1,0,0,0,2,0,0,3,0,0,0,0,0,0,0,1,0,1,0,1],
-		 [1,1,1,0,0,3,3,1,0,0,0,0,0,1,0,3,0,0,0,0,0,0,0,3,0,0,1,0,1],
-		 [1,0,0,0,1,1,1,1,0,0,0,0,0,0,1,0,0,1,1,1,3,3,3,1,1,1,0,0,1],
-		 [1,3,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1,0,0,3,0,1],
-		 [1,3,3,0,0,0,0,0,0,0,1,1,1,0,1,0,1,3,0,0,0,0,1,0,0,1,1,1,1],
-		 [1,1,1,1,0,3,0,0,0,1,1,1,0,0,1,0,1,1,3,0,0,1,0,3,0,1,0,0,1],
-		 [1,0,0,0,0,0,0,0,0,0,0,0,3,0,1,1,1,0,0,3,1,0,0,0,1,0,0,0,1],
-		 [1,0,0,0,3,0,0,0,0,0,3,3,0,1,0,0,0,1,1,1,1,0,0,0,0,0,0,0,1],
-		 [1,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,0,1],
-		 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]]
-		/* */
-
-		/* level 3 *
-		[[1,0,0,0,0,0,0,0,0,0,0,1],
-		 [1,0,0,0,0,0,1,1,0,0,0,1],
-		 [1,2,0,0,3,0,0,0,0,0,0,2],
-		 [1,1,1,1,1,1,1,1,1,1,1,1]]
-        /* */
-	];
+	levels=[];
 	
 
 	for (var lev=0; lev<levels_comp.length; lev++){
