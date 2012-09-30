@@ -31,6 +31,7 @@ var image_brick = new Image();
 image_brick.src = "brick.png";
 image_brick.onload = images_check_in;
 
+
 var player = {
 	pos: new Vector2d(),
 	carrying: false,
