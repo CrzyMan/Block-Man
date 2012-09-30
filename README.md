@@ -21,15 +21,16 @@ IMPLEMENTED:
 - Switch level after win.
 - Level data compression/decompression.
 - only 1 level decompressed at a time (save on memory).
-- All real Block Dude Levels
-- Can explore laterally
+- All real Block Dude Levels.
+- Can explore laterally.
+- Art... nuff said.
+- Reset Level (r).
 
 TO BE DONE:
 
 - Explore map without moving the player (shift+arrow).
 - Passwords.
 - Level menu.
-- Reset Level (r).
 - Main menu.
 
 FUTURE PLANS:
