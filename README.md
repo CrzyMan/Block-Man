@@ -8,7 +8,7 @@ using HTML5, Javascript
 ----
 TO PREVIEW
 
-Simply run "main.html" (or the other main.html!) in a canvas element supporting browser to get a working model of the final level of "Block Dude." (currently the last level of Block Dude, but level two of Block Man)
+Simply run the .html file in a canvas element supporting browser to get a working model of the final level of "Block Dude." (currently the last level of Block Dude, but level two of Block Man)
 
 ----
 IMPLEMENTED:
