@@ -11,6 +11,26 @@ var exploring = false, exploreOffX = 0, exploreOffY = 0;
 canvas.height = 440;
 canvas.width = 600;
 
+images_loaded = 0;
+function images_check_in(){
+	images_loaded++;
+	if (images_loaded==4){
+		draw_level();
+	}
+};
+var image_player_sheet = new Image();
+image_player_sheet.src = "player_sheet.png";
+image_player_sheet.onload = images_check_in;
+var image_block = new Image();
+image_block.src = "block.png";
+image_block.onload = images_check_in;
+var image_goal = new Image();
+image_goal.src = "goal.png";
+image_goal.onload = images_check_in;
+var image_brick = new Image();
+image_brick.src = "brick.png";
+image_brick.onload = images_check_in;
+
 var player = {
 	pos: new Vector2d(),
 	carrying: false,
@@ -217,7 +237,7 @@ var levels_comp = [
 	"20b:b18ab:b18ab:b3ab8ab5ab:bg2ab4abamabamp2ab:20b",
 
 	/* Level 2 */
-	"ab4a2b9a2b4a:ab17ab:2b18ab:bg19ab:2b11ab3am4ab:ab11abama2mp2ab:a5b3a14b:5ab2amb:5a5b",
+	"ab4a2b9a2b4a:2b17ab:bg18ab:2b19ab:ab11ab3am4ab:ab11abama2mp2ab:a5b3a14b:5ab2amb:5a5b",
 
 	/* level 3 */
 	"ab3a13ba:babab13ab:b2ab14ab:b16amb:b15a2mb:ba3b4ap3abma2b:babab4ab2a5b:babab2ma2b2ab:bgba6ba2b:3ba2b3a3b",
@@ -268,7 +288,7 @@ function find_player_pos(l){
 	return new Vector2d();
 }
 
-draw_level();
+//draw_level();
 function draw_level(l){
 	if (l==undefined) l=LEVEL;
 
@@ -308,28 +328,30 @@ function draw_level(l){
 				switch (curr_lev[row][col]){
 					//brick
 					case 1:
-						ctx.fillStyle = "red";
+						ctx.drawImage(image_brick, 40*col, 40*row);
 						break;
 
 					// player
 					case 2:
-						ctx.fillStyle = "blue";
+						// context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+						var d = player.direction==1?0:2;
+						var c = player.carrying==true?1:0;
+						ctx.drawImage(image_player_sheet, 40*(d+c), 0, 40, 40, 40*col, 40*row, 40, 40);
 						break;
 
 					// block
 					case 3:
-						ctx.fillStyle = "grey";
+						ctx.drawImage(image_block, 40*col, 40*row);
 						break;
 
 					// goal
 					case 4:
-						ctx.fillStyle = "green";
+						ctx.drawImage(image_goal, 40*col, 40*row);
 						break;
 				}
-				ctx.fillRect(40*col, 40*row, 40,40);
-				ctx.strokeRect(40*col, 40*row, 40,40);
+
 				if (curr_lev[row][col]==2){
-					ctx.strokeRect(40*col + 35*(player.direction==1), 40*row + 15, 5,5);
+					//ctx.strokeRect(40*col + 35*(player.direction==1), 40*row + 15, 5,5);
 				}
 			}
 		}
